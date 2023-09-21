@@ -16,7 +16,6 @@ function createGrid(): number[][] {
     }
     return grid;
 }
-
 export function fillGrid(grid: number[][]): boolean {
     for (let i = 0; i < 81; i++) {
         const row = Math.floor(i / 9);
@@ -42,10 +41,30 @@ export function fillGrid(grid: number[][]): boolean {
     }
     return true;
 }
-
-
 export function generateSudoku(): number[][] {
     const grid = createGrid();
     fillGrid(grid);
+    return grid;
+}
+export function generateSudokuWithLevel(level: number): number[][] {
+    if (level < 1 || level > 81) {
+        throw new Error('O nível deve estar entre 1 e 81');
+    }
+
+    const grid = generateSudoku();
+
+    const positionsToRemove: number[][] = [];
+
+    while (positionsToRemove.length < level) {
+        const row = Math.floor(Math.random() * 9);
+        const col = Math.floor(Math.random() * 9);
+        const position = [row, col];
+
+        if (!positionsToRemove.some(([r, c]) => r === row && c === col)) {
+            positionsToRemove.push(position);
+            grid[row][col] = 0;
+        }
+    }
+
     return grid;
 }
